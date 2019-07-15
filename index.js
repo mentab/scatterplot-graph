@@ -25,26 +25,29 @@ d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
 	.then((data) => {
 		const dataset = data;
 
-		const xScale = d3.scaleLinear()
-			.domain(d3.extent(dataset, (d) => d.Year))
+		const xScale = d3.scaleTime()
+			.domain(d3.extent(dataset, (d) => new Date(d.Year, 0, 1)))
 			.range([m, w - m]);
 
 		const yScale = d3.scaleLinear()
-			.domain(d3.extent(dataset, (d) => d.Seconds))
+			.domain(d3.extent(dataset, (d) => new Date(1970, 0, 1, 0, 0, d.Seconds)))
 			.range([h - m, m]);
 
 		svg.selectAll('circle')
 			.data(dataset)
 			.enter()
 			.append('circle')
-			.attr('cx', 50)
-			.attr('cy', 50)
-			.attr('r', 50)
+			.attr('cx', (d) => xScale(new Date(d.Year, 0, 1)))
+			.attr('cy', (d) => yScale(new Date(1970, 0, 1, 0, 0, d.Seconds)))
+			.attr('r', 5)
 			.attr('class', 'dot')
 			.attr('fill', 'red');
 
-		const xAxis = d3.axisBottom(xScale);
-		const yAxis = d3.axisLeft(yScale);
+		const xAxis = d3.axisBottom(xScale)
+			.tickFormat(d3.timeFormat("%Y"));
+
+		const yAxis = d3.axisLeft(yScale)
+			.tickFormat(d3.timeFormat("%M:%S"));
 
 		svg.append('g')
 			.attr('transform', 'translate(0,' + (h - m) + ')')
