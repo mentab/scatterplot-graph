@@ -12,6 +12,10 @@ content.append('h2')
 	.attr('id', 'subtitle')
 	.text('35 Fastest times up Alpe d\'Huez');
 
+content.append('p')
+	.attr('id', 'legend')
+	.text('legend text');
+
 const tooltip = content.append('div')
 	.attr('id', 'tooltip')
 	.style('position', 'absolute')
@@ -40,6 +44,8 @@ d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
 			.attr('cx', (d) => xScale(new Date(d.Year, 0, 1)))
 			.attr('cy', (d) => yScale(new Date(1970, 0, 1, 0, 0, d.Seconds)))
 			.attr('r', 5)
+			.attr('data-xvalue', (d) => new Date(d.Year, 0, 1))
+			.attr('data-yvalue', (d) => new Date(1970, 0, 1, 0, 0, d.Seconds))
 			.attr('class', 'dot')
 			.attr('fill', 'red');
 
