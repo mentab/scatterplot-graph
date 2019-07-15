@@ -29,23 +29,28 @@ d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
 	.then((data) => {
 		const dataset = data;
 
+		dataset.forEach(function (d) {
+			d.xFormat = new Date(d.Year, 0, 1);
+			d.yFormat = new Date(1970, 0, 1, 0, 0, d.Seconds);
+		});
+
 		const xScale = d3.scaleTime()
-			.domain(d3.extent(dataset, (d) => new Date(d.Year, 0, 1)))
+			.domain(d3.extent(dataset, (d) => d.xFormat))
 			.range([m, w - m]);
 
 		const yScale = d3.scaleLinear()
-			.domain(d3.extent(dataset, (d) => new Date(1970, 0, 1, 0, 0, d.Seconds)))
+			.domain(d3.extent(dataset, (d) => d.yFormat))
 			.range([h - m, m]);
 
 		svg.selectAll('circle')
 			.data(dataset)
 			.enter()
 			.append('circle')
-			.attr('cx', (d) => xScale(new Date(d.Year, 0, 1)))
-			.attr('cy', (d) => yScale(new Date(1970, 0, 1, 0, 0, d.Seconds)))
+			.attr('cx', (d) => xScale(d.xFormat))
+			.attr('cy', (d) => yScale(d.yFormat))
 			.attr('r', 5)
-			.attr('data-xvalue', (d) => new Date(d.Year, 0, 1))
-			.attr('data-yvalue', (d) => new Date(1970, 0, 1, 0, 0, d.Seconds))
+			.attr('data-xvalue', (d) => d.xFormat)
+			.attr('data-yvalue', (d) => d.yFormat)
 			.attr('class', 'dot')
 			.attr('fill', 'red');
 
