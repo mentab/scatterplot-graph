@@ -55,8 +55,8 @@ d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
 			.attr('fill', 'red')
 			.on('mouseover', (d) => {
 				tooltip.attr('data-year', d.xFormat)
-					.style('left', xScale(d.xFormat) - 100 + 'px')
-					.style('top', yScale(d.yFormat) - 100 + 'px')
+					.style('left', xScale(d.xFormat) - 200 + 'px')
+					.style('top', yScale(d.yFormat) - 200 + 'px')
 					.style('transition', 'opacity .5s ease-out')
 					.style('opacity', .8)
 					.html(() => `<p>Time : ${d.Time}<br/>
