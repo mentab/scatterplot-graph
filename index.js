@@ -48,11 +48,31 @@ d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
 			.append('circle')
 			.attr('cx', (d) => xScale(d.xFormat))
 			.attr('cy', (d) => yScale(d.yFormat))
-			.attr('r', 5)
+			.attr('r', 10)
 			.attr('data-xvalue', (d) => d.xFormat)
 			.attr('data-yvalue', (d) => d.yFormat)
 			.attr('class', 'dot')
-			.attr('fill', 'red');
+			.attr('fill', 'red')
+			.on('mouseover', (d) => {
+				tooltip.attr('data-year', d.xFormat)
+					.style('left', xScale(d.xFormat) - 100 + 'px')
+					.style('top', yScale(d.yFormat) - 100 + 'px')
+					.style('transition', 'opacity .5s ease-out')
+					.style('opacity', .8)
+					.html(() => `<p>Time : ${d.Time}<br/>
+								Place : ${d.Place}<br/>
+								Seconds : ${d.Seconds}<br/>
+								Name : ${d.Name}<br/>
+								Year : ${d.Year}<br/>
+								Nationality : ${d.Nationality}<br/>
+								Doping : ${d.Doping}<br/>
+								URL : ${d.URL}</p>
+					`);
+			})
+			.on('mouseout', function () {
+				tooltip.style('opacity', 0)
+					.html(() => '');
+			});;
 
 		const xAxis = d3.axisBottom(xScale)
 			.tickFormat(d3.timeFormat("%Y"));
