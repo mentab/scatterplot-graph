@@ -1,6 +1,9 @@
-const w = 750;
-const h = 400;
+const w = 900;
+const h = 600;
 const m = 60;
+
+const dopingColor = 'orange';
+const noDopingColor = 'lightblue';
 
 const content = d3.select('.content');
 
@@ -12,10 +15,6 @@ content.append('h2')
 	.attr('id', 'subtitle')
 	.text('35 Fastest times up Alpe d\'Huez');
 
-content.append('p')
-	.attr('id', 'legend')
-	.text('legend text');
-
 const tooltip = content.append('div')
 	.attr('id', 'tooltip')
 	.style('position', 'absolute')
@@ -24,6 +23,33 @@ const tooltip = content.append('div')
 const svg = content.append('svg')
 	.attr('width', w)
 	.attr('height', h);
+
+const legend = svg.append('g')
+	.attr('id', 'legend');
+
+legend.append('circle')
+	.attr('cx', w - w / 5)
+	.attr('cy', h - h / 20)
+	.attr('r', 5)
+	.attr('fill', dopingColor);
+
+legend.append('circle')
+	.attr('cx', w - w / 5)
+	.attr('cy', h - h / 20 + 20)
+	.attr('r', 5)
+	.attr('fill', noDopingColor);
+
+legend.append('text')
+	.attr('x', w - w / 5 + 10)
+	.attr('y', h - h / 20)
+	.style('alignment-baseline', 'middle')
+	.text('Riders with doping allegations');
+
+legend.append('text')
+	.attr('x', w - w / 5 + 10)
+	.attr('y', h - h / 20 + 20)
+	.style('alignment-baseline', 'middle')
+	.text('No doping allegations');
 
 d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json')
 	.then((data) => {
@@ -48,26 +74,20 @@ d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
 			.append('circle')
 			.attr('cx', (d) => xScale(d.xFormat))
 			.attr('cy', (d) => yScale(d.yFormat))
-			.attr('r', 10)
+			.attr('r', 6)
 			.attr('data-xvalue', (d) => d.xFormat)
 			.attr('data-yvalue', (d) => d.yFormat)
 			.attr('class', 'dot')
-			.attr('fill', 'red')
+			.attr('fill', (d) => d.Doping ? dopingColor : noDopingColor)
+			.style('stroke', 'black')
 			.on('mouseover', (d) => {
 				tooltip.attr('data-year', d.xFormat)
-					.style('left', xScale(d.xFormat) - 200 + 'px')
-					.style('top', yScale(d.yFormat) - 200 + 'px')
-					.style('transition', 'opacity .5s ease-out')
-					.style('opacity', .8)
-					.html(() => `<p>Time : ${d.Time}<br/>
-								Place : ${d.Place}<br/>
-								Seconds : ${d.Seconds}<br/>
-								Name : ${d.Name}<br/>
-								Year : ${d.Year}<br/>
-								Nationality : ${d.Nationality}<br/>
-								Doping : ${d.Doping}<br/>
-								URL : ${d.URL}</p>
-					`);
+					.style('left', xScale(d.xFormat) + 10 + 'px')
+					.style('top', yScale(d.yFormat) - 10 + 'px')
+					.style('opacity', .9)
+					.html(() => `<p>${d.Name} : ${d.Nationality}<br/>
+					Year : ${d.Year}, Time : ${d.Time}
+					${d.Doping ? '<br/><br/>Doping : ' + d.Doping : ''}</p>`);
 			})
 			.on('mouseout', function () {
 				tooltip.style('opacity', 0)

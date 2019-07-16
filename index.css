@@ -42,7 +42,7 @@ body
 
 .dot:hover
 {
-	fill: orange;
+	fill: lightpink;
 }
 
 #title
@@ -57,9 +57,10 @@ body
 	border-radius: 5px;
 	border: 1px black solid;
 	background: white;
+	font-size: 10px;
 }
 
 #legend
 {
-
+	font-size: 9px;
 }
