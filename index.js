@@ -52,35 +52,35 @@ legend.append('text')
 	.text('No doping allegations');
 
 d3.json('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json')
-	.then((data) => {
+	.then(data => {
 		const dataset = data;
 
-		dataset.forEach(function (d) {
+		dataset.forEach(d => {
 			d.xFormat = new Date(d.Year, 0, 1);
 			d.yFormat = new Date(1970, 0, 1, 0, 0, d.Seconds);
 		});
 
 		const xScale = d3.scaleTime()
-			.domain(d3.extent(dataset, (d) => d.xFormat))
+			.domain(d3.extent(dataset, d => d.xFormat))
 			.range([m, w - m]);
 
 		const yScale = d3.scaleLinear()
-			.domain(d3.extent(dataset, (d) => d.yFormat))
+			.domain(d3.extent(dataset, d => d.yFormat))
 			.range([h - m, m]);
 
 		svg.selectAll('circle')
 			.data(dataset)
 			.enter()
 			.append('circle')
-			.attr('cx', (d) => xScale(d.xFormat))
-			.attr('cy', (d) => yScale(d.yFormat))
+			.attr('cx', d => xScale(d.xFormat))
+			.attr('cy', d => yScale(d.yFormat))
 			.attr('r', 6)
-			.attr('data-xvalue', (d) => d.xFormat)
-			.attr('data-yvalue', (d) => d.yFormat)
+			.attr('data-xvalue', d => d.xFormat)
+			.attr('data-yvalue', d => d.yFormat)
 			.attr('class', 'dot')
-			.attr('fill', (d) => d.Doping ? dopingColor : noDopingColor)
+			.attr('fill', d => d.Doping ? dopingColor : noDopingColor)
 			.style('stroke', 'black')
-			.on('mouseover', (d) => {
+			.on('mouseover', d => {
 				tooltip.attr('data-year', d.xFormat)
 					.style('left', xScale(d.xFormat) + 10 + 'px')
 					.style('top', yScale(d.yFormat) - 10 + 'px')
